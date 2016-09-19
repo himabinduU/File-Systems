@@ -4,7 +4,7 @@
 #define SUPER_BLOCK_OFFSET 0x400
 
 int fd;
-unsigned short int file_cnt = 0, dir_cnt = 0;
+unsigned short int file_cnt = 0, dir_cnt = 0, spaces = 0;
 unsigned int GroupDescOffset = 0, AddrFrstInodeTable, FrstDisketteOffset, FrstDataBlockAddr, InodesPerGroup, BlockSize, InodeSize, BlockNumFrstInodeTable, PtrFrstDataBlock;
 
 void function(unsigned int DataBlockAddr)
@@ -44,6 +44,11 @@ void function(unsigned int DataBlockAddr)
 		}
 
 		lseek(fd, DataBlockAddr + 6 + 2, SEEK_SET);
+		
+		for (i = 0; i < spaces; i++)
+		{
+			printf(" ");
+		}
 
 		for (i = 0; i < len; i++)
 		{
@@ -64,7 +69,9 @@ void function(unsigned int DataBlockAddr)
 				lseek(fd, AddrInodeTable + 40, SEEK_SET);
 		//		lseek(fd, (BlockNumInodeTable * BlockSize) + 40, SEEK_SET);
 				read(fd, &PtrFrstDataBlock, 4);
+				spaces += 3;
 				function(PtrFrstDataBlock * BlockSize);
+				spaces -= 3;
 			}
 		}
 		else

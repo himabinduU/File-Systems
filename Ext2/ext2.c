@@ -10,9 +10,8 @@ unsigned int GroupDescOffset = 0, AddrFrstInodeTable, FrstDisketteOffset, FrstDa
 void function(unsigned int DataBlockAddr)
 {
 	unsigned char ch;
-	static unsigned short int offset = 0;
-	unsigned short int i, add, type = 0, len = 0;
-	unsigned int InodeNum, BlockNumInodeTable, AddrInodeTable;
+	unsigned short int i, add, type = 0, len = 0, offset = 0;
+	unsigned int InodeNum = 0, BlockNumInodeTable = 0, AddrInodeTable;
 
 	lseek(fd, DataBlockAddr, SEEK_SET);
 	read(fd, &InodeNum, 4);
@@ -63,10 +62,9 @@ void function(unsigned int DataBlockAddr)
 				read(fd, &BlockNumInodeTable, 4);
 				AddrInodeTable = BlockNumInodeTable * BlockSize;
 				lseek(fd, AddrInodeTable + 40, SEEK_SET);
+		//		lseek(fd, (BlockNumInodeTable * BlockSize) + 40, SEEK_SET);
 				read(fd, &PtrFrstDataBlock, 4);
-				InodeNum = 0;
-				DataBlockAddr = PtrFrstDataBlock * BlockSize;
-				function(DataBlockAddr);
+				function(PtrFrstDataBlock * BlockSize);
 			}
 		}
 		else
